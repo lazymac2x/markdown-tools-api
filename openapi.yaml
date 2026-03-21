@@ -1,0 +1,232 @@
+openapi: 3.0.3
+info:
+  title: Markdown Tools API
+  description: Markdown processing REST API — convert, extract, lint.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3900
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string }
+                  service: { type: string }
+                  version: { type: string }
+
+  /api/v1/md-to-html:
+    post:
+      summary: Convert Markdown to HTML
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [markdown]
+              properties:
+                markdown: { type: string }
+      responses:
+        '200':
+          description: Converted HTML
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  html: { type: string }
+
+  /api/v1/html-to-md:
+    post:
+      summary: Convert HTML to Markdown
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [html]
+              properties:
+                html: { type: string }
+      responses:
+        '200':
+          description: Converted Markdown
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  markdown: { type: string }
+
+  /api/v1/md-to-text:
+    post:
+      summary: Convert Markdown to plain text
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [markdown]
+              properties:
+                markdown: { type: string }
+      responses:
+        '200':
+          description: Plain text
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  text: { type: string }
+
+  /api/v1/extract-toc:
+    post:
+      summary: Extract table of contents
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [markdown]
+              properties:
+                markdown: { type: string }
+      responses:
+        '200':
+          description: Table of contents
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  toc:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        level: { type: integer }
+                        text: { type: string }
+                        slug: { type: string }
+
+  /api/v1/extract-links:
+    post:
+      summary: Extract all links
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [markdown]
+              properties:
+                markdown: { type: string }
+      responses:
+        '200':
+          description: Extracted links
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  links:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        text: { type: string }
+                        url: { type: string }
+                        title: { type: string, nullable: true }
+
+  /api/v1/extract-code:
+    post:
+      summary: Extract code blocks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [markdown]
+              properties:
+                markdown: { type: string }
+      responses:
+        '200':
+          description: Extracted code blocks
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  blocks:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        language: { type: string, nullable: true }
+                        code: { type: string }
+
+  /api/v1/stats:
+    post:
+      summary: Word count, reading time, heading count
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [markdown]
+              properties:
+                markdown: { type: string }
+      responses:
+        '200':
+          description: Document statistics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  words: { type: integer }
+                  characters: { type: integer }
+                  headings: { type: integer }
+                  links: { type: integer }
+                  codeBlocks: { type: integer }
+                  readingTimeMin: { type: integer }
+
+  /api/v1/lint:
+    post:
+      summary: Lint/validate markdown
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [markdown]
+              properties:
+                markdown: { type: string }
+      responses:
+        '200':
+          description: Lint results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  valid: { type: boolean }
+                  warnings:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        rule: { type: string }
+                        message: { type: string }
+                        line: { type: integer }
+                        offset: { type: integer }

@@ -1,0 +1,20 @@
+{
+  "name": "markdown-tools-api",
+  "version": "1.0.0",
+  "description": "Markdown processing REST API and MCP server — convert, extract, lint",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "mcp": "node src/mcp-server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "keywords": ["markdown", "html", "converter", "mcp", "api", "lint"],
+  "author": "lazymac2x",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "marked": "^15.0.6",
+    "turndown": "^7.2.0"
+  }
+}
